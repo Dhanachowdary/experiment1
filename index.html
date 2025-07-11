@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      /* Gradient background */
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: #fff;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #fff;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+    }
+
+    .calculator {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+      padding: 20px;
+      width: 320px;
+      color: #222;
+    }
+
+    .display {
+      background-color: #222;
+      color: white;
+      font-size: 2em;
+      text-align: right;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      min-height: 50px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .buttons button {
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      font-size: 1.5em;
+      padding: 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .buttons button:hover {
+      background-color: #e0e0e0;
+    }
+
+    .buttons button:active {
+      background-color: #d0d0d0;
+    }
+
+    .buttons .equal {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .buttons .equal:hover {
+      background-color: #45a049;
+    }
+
+    .buttons .clear {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .buttons .clear:hover {
+      background-color: #e53935;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Simple Calculator</h1>
+
+  <div class="calculator">
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+      <button onclick="appendNumber(7)">7</button>
+      <button onclick="appendNumber(8)">8</button>
+      <button onclick="appendNumber(9)">9</button>
+      <button onclick="operate('/')">/</button>
+
+      <button onclick="appendNumber(4)">4</button>
+      <button onclick="appendNumber(5)">5</button>
+      <button onclick="appendNumber(6)">6</button>
+      <button onclick="operate('*')">*</button>
+
+      <button onclick="appendNumber(1)">1</button>
+      <button onclick="appendNumber(2)">2</button>
+      <button onclick="appendNumber(3)">3</button>
+      <button onclick="operate('-')">-</button>
+
+      <button onclick="appendNumber(0)">0</button>
+      <button onclick="clearDisplay()" class="clear">C</button>
+      <button onclick="calculateResult()" class="equal">=</button>
+      <button onclick="operate('+')">+</button>
+    </div>
+  </div>
+
+  <script>
+    let currentInput = "";
+    let operator = "";
+    let previousInput = "";
+
+    function appendNumber(number) {
+      if (currentInput === "0") {
+        currentInput = number.toString();
+      } else {
+        currentInput += number.toString();
+      }
+      updateDisplay();
+    }
+
+    function operate(op) {
+      if (currentInput === "") return;
+      if (previousInput !== "") {
+        calculateResult();
+      }
+      operator = op;
+      previousInput = currentInput;
+      currentInput = "";
+    }
+
+    function calculateResult() {
+      if (previousInput === "" || currentInput === "") return;
+      let result;
+      const prev = parseFloat(previousInput);
+      const curr = parseFloat(currentInput);
+      
+      switch (operator) {
+        case "+":
+          result = prev + curr;
+          break;
+        case "-":
+          result = prev - curr;
+          break;
+        case "*":
+          result = prev * curr;
+          break;
+        case "/":
+          if (curr === 0) {
+            alert("Cannot divide by zero");
+            return;
+          }
+          result = prev / curr;
+          break;
+        default:
+          return;
+      }
+
+      currentInput = result.toString();
+      operator = "";
+      previousInput = "";
+      updateDisplay();
+    }
+
+    function clearDisplay() {
+      currentInput = "";
+      operator = "";
+      previousInput = "";
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      const display = document.getElementById("display");
+      display.textContent = currentInput || "0";
+    }
+  </script>
+
+</body>
+</html>
